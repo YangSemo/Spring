@@ -2,6 +2,9 @@ package com.spring.test;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +28,15 @@ public class CommonController {
 
 	@RequestMapping(value = "/upload.do", method= {RequestMethod.GET, RequestMethod.POST})
 	public String upload(@RequestParam("uploadFile") MultipartFile file, Model model) throws IllegalStateException, IOException {
+		
+		Date date = new Date();
+		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG);
+		SimpleDateFormat sDate = new SimpleDateFormat("yyyy-MM-dd hh-mm-ss");
+		
+		String formattedDate = sDate.format(date);
+		
 		if(!file.getOriginalFilename().isEmpty()) {
-			file.transferTo(new File(FILE_SERVER_PATH, file.getOriginalFilename()));
+			file.transferTo(new File(FILE_SERVER_PATH, formattedDate));
 			model.addAttribute("msg","File uploaded successfully.");
 			logger.info("File uploaded successfully.");
 		}else {
